@@ -8,10 +8,15 @@ set -eu
 print_usage_and_exit () {
   cat <<-USAGE 1>&2
 	Usage   : ${0##*/} -t<ディレクトリT> [ディレクトリM]
-	Options : 
+	Options : -ot -om
 
 	2つのディレクトリ内のファイルをハッシュ値で比較し、
 	対応がないファイルをリスト化して出力する。
+
+	-tオプションでディレクトリTを指定する。
+	-otオプションでディレクトリTにのみ存在するファイルのリストを出力する。
+	-omオプションでディレクトリMにのみ存在するファイルのリストを出力する。
+	※-otと-omが両方指定された場合は-otが優先される
 	USAGE
   exit 1
 }
@@ -23,6 +28,8 @@ print_usage_and_exit () {
 # 変数を初期化
 opr=''
 opt_t=''
+opt_ot='no'
+opt_om='no'
 
 # 引数をパース
 i=1
@@ -31,6 +38,8 @@ do
   case "$arg" in
     -h|--help|--version) print_usage_and_exit ;;
     -t*)                 opt_t=${arg#-t}      ;;
+    -ot)                 opt_ot='yes'         ;;
+    -om)                 opt_om='yes'         ;;
     *)
       if [ $i -eq $# ] && [ -z "$opr" ]; then
         opr=$arg
@@ -59,6 +68,8 @@ fi
 # パラメータを決定
 mdir=$opr
 tdir=$opt_t
+istonly=$opt_ot
+ismonly=$opt_om
 
 ######################################################################
 # 事前準備
@@ -83,7 +94,13 @@ xargs md5sum                                                         |
 sort -k1,1                                                           |
 
 # 2つのファイル群を結合
-join -1 1 -2 1 -o 1.2,2.2 "$tmpfile" -                               |
+if   [ "$istonly" == 'yes' ]; then
+  join -1 1 -2 1 -o 1.2,2.2 -v 1 "$tmpfile" -
+elif [ "$ismonly" == 'yes' ]; then
+  join -1 1 -2 1 -o 1.2,2.2 -v 2 "$tmpfile" - | awk '{print $1}'
+else
+  join -1 1 -2 1 -o 1.2,2.2      "$tmpfile" -
+fi                                                                   |
 
 # 出力
 cat
