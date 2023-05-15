@@ -55,13 +55,13 @@ done
 
 # ディレクトリであるか判定
 if [ ! -d "$opr" ]; then
-  echo "${0##*/}: a direcoty must be specified" 1>&2
+  echo "${0##*/}: a transaction directory must be specified" 1>&2
   exit 21
 fi
 
 # ディレクトリであるか判定
 if [ ! -d "$opt_t" ]; then
-  echo "${0##*/}: a direcoty must be specified" 1>&2
+  echo "${0##*/}: a master directory must be specified" 1>&2
   exit 31
 fi
 
