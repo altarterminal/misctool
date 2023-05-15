@@ -97,7 +97,7 @@ sort -k1,1                                                           |
 if   [ "$istonly" == 'yes' ]; then
   join -1 1 -2 1 -o 1.2,2.2 -v 1 "$tmpfile" -
 elif [ "$ismonly" == 'yes' ]; then
-  join -1 1 -2 1 -o 1.2,2.2 -v 2 "$tmpfile" - | awk '{print $1}'
+  join -1 1 -2 1 -o 1.2,2.2 -v 2 "$tmpfile" - | sed 's!^ !!'
 else
   join -1 1 -2 1 -o 1.2,2.2      "$tmpfile" -
 fi                                                                   |
