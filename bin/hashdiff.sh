@@ -83,14 +83,16 @@ trap 'rm "$tmpfile"' EXIT
 ######################################################################
 
 # ディレクトリTに対して<ハッシュ値>と<ファイル名>を保存
-find "$tdir" -type f                                                 |
-xargs md5sum                                                         |
+find "$tdir" -type f -print0                                         |
+xargs -0 md5sum                                                      |
+awk '{ buf=$2;for(i=3;i<=NF;i++){buf = buf "_" $i;} print $1,buf;}'  |
 sort -k1,1                                                           |
 cat > "$tmpfile"
 
 # ディレクトリMに対して<ハッシュ値>と<ファイル名>を保存
-find "$mdir" -type f                                                 |
-xargs md5sum                                                         |
+find "$mdir" -type f -print0                                         |
+xargs -0 md5sum                                                      |
+awk '{ buf=$2;for(i=3;i<=NF;i++){buf = buf "_" $i;} print $1,buf;}'  |
 sort -k1,1                                                           |
 
 # 2つのファイル群を結合
