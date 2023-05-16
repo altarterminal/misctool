@@ -68,8 +68,8 @@ fi
 # パラメータを決定
 mdir=$opr
 tdir=$opt_t
-istonly=$opt_ot
-ismonly=$opt_om
+isonlyt=$opt_ot
+isonlym=$opt_om
 
 ######################################################################
 # 事前準備
@@ -96,9 +96,9 @@ awk '{ buf=$2;for(i=3;i<=NF;i++){buf = buf "_" $i;} print $1,buf;}'  |
 sort -k1,1                                                           |
 
 # 2つのファイル群を結合
-if   [ "$istonly" == 'yes' ]; then
+if   [ "$isonlyt" == 'yes' ]; then
   join -1 1 -2 1 -o 1.2,2.2 -v 1 "$tmpfile" -
-elif [ "$ismonly" == 'yes' ]; then
+elif [ "$isonlym" == 'yes' ]; then
   join -1 1 -2 1 -o 1.2,2.2 -v 2 "$tmpfile" - | sed 's!^ !!'
 else
   join -1 1 -2 1 -o 1.2,2.2      "$tmpfile" -
