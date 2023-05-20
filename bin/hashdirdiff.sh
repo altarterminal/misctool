@@ -97,11 +97,14 @@ sort -k1,1                                                           |
 
 # 2つのファイル群を結合
 if   [ "$isonlyt" == 'yes' ]; then
-  join -1 1 -2 1 -o 1.2,2.2 -v 1 "$tmpfile" -
+  # ディレクトリTのみに存在するリストを出力
+  join -1 1 -2 1 -v 1 "$tmpfile" - | awk '{print $2}'
 elif [ "$isonlym" == 'yes' ]; then
-  join -1 1 -2 1 -o 1.2,2.2 -v 2 "$tmpfile" - | sed 's!^ !!'
+  # ディレクトリMのみに存在するリストを出力
+  join -1 1 -2 1 -v 2 "$tmpfile" - | awk '{print $2}'
 else
-  join -1 1 -2 1 -o 1.2,2.2      "$tmpfile" -
+  # 両方のディレクトリに存在するリストを出力
+  join -1 1 -2 1 -o 1.2,2.2 "$tmpfile" -
 fi                                                                   |
 
 # 出力

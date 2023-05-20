@@ -23,3 +23,4 @@
 | mktemp            | -          |
 | FreeBSD find      | -          |
 | FreeBSD xargs     | -          |
+| GNU md5sum        | 0.9.5      |
